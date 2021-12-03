@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { api } from '../service/api';
 
-interface Transaction {
+export interface Transaction {
   _id: string;
   myId: string;
   title: string;
@@ -19,6 +19,7 @@ interface Transaction {
 
 type TransactionInput = Omit<Transaction, '_id' | 'myId' | 'createdAt'>;
 
+type EditTransactionInput = Omit<Transaction, '_id' | 'createdAt'>;
 interface TransactionsProviderProps {
   children: ReactNode;
 }
@@ -27,7 +28,9 @@ interface TransactionsContextData {
   transactions: Transaction[];
   createTransaction: (transaction: TransactionInput) => Promise<void>;
   deleteTransaction: (id: string) => Promise<void | undefined>;
-  getTransaction: (id: string) => Promise<Transaction | undefined>;
+  editTransaction: (
+    transaction: EditTransactionInput
+  ) => Promise<Transaction | undefined>;
 }
 
 export const TransactionsContext = createContext<TransactionsContextData>(
@@ -43,11 +46,6 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       .then((response) => setTransactions(response.data.transactions));
   }, []);
 
-  async function getTransaction(id: string): Promise<Transaction> {
-    const response = await api.get(`/id/${id}`);
-    return response.data.transaction;
-  }
-
   async function createTransaction(transactionInput: TransactionInput) {
     await api.post('/transactions', {
       ...transactionInput,
@@ -56,6 +54,21 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     await api
       .get('/transactions')
       .then((response) => setTransactions(response.data.transactions));
+  }
+
+  async function editTransaction(transaction: EditTransactionInput) {
+    const { myId, title, category, amount, type } = transaction;
+    const response = await api.put(`/transactions`, {
+      myId,
+      title,
+      category,
+      amount,
+      type,
+    });
+    await api
+      .get('/transactions')
+      .then((response) => setTransactions(response.data.transactions));
+    return response.data.transaction;
   }
 
   async function deleteTransaction(id: string) {
@@ -73,7 +86,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         transactions,
         createTransaction,
         deleteTransaction,
-        getTransaction,
+        editTransaction,
       }}
     >
       {children}

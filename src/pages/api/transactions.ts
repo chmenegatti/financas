@@ -29,6 +29,20 @@ export default async function transactionHandler(
       response.status(200).json({ result });
 
       break;
+
+    case 'PUT':
+      const { myId, title, amount, type, category } = request.body;
+
+      const resultEdit = await collection.updateOne(
+        { myId: myId },
+        { $set: { title, amount, category, type } }
+      );
+
+      response.status(200).json({
+        resultEdit,
+      });
+      break;
+
     default:
       response.status(400).json({
         message: 'Hello World - Metodo desconhecido',

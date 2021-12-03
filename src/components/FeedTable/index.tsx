@@ -1,10 +1,23 @@
-import { useTransactions } from '../../hooks/useTransactions';
+import { Transaction, useTransactions } from '../../hooks/useTransactions';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
-
 import { Container } from './styles';
+
+import { useState } from 'react';
+import { EditTransactionModal } from '../EditTransactionModel';
 
 export function FeedTable() {
   const { transactions, deleteTransaction } = useTransactions();
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const handleOpenEditModal = (transaction: Transaction) => {
+    localStorage.setItem('transactionToEdit', JSON.stringify(transaction));
+    setModalIsOpen(true);
+  };
+
+  const handleCloseEditmModal = () => {
+    setModalIsOpen(false);
+  };
 
   const handleDelete = async (id: string) => {
     await deleteTransaction(id);
@@ -43,7 +56,10 @@ export function FeedTable() {
                 )}
               </td>
               <td>
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => handleOpenEditModal(transaction)}
+                >
                   <FaPencilAlt size={16} />
                 </button>
                 <button type="button">
@@ -58,6 +74,11 @@ export function FeedTable() {
           ))}
         </tbody>
       </table>
+
+      <EditTransactionModal
+        isOpen={modalIsOpen}
+        onRequestClose={handleCloseEditmModal}
+      />
     </Container>
   );
 }

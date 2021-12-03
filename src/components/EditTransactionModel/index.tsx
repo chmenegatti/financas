@@ -1,7 +1,9 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
+
+import Modal from 'react-modal';
+
 import { CgCloseO } from 'react-icons/cg';
 import { FaArrowAltCircleDown, FaArrowAltCircleUp } from 'react-icons/fa';
-import Modal from 'react-modal';
 import { useTransactions } from '../../hooks/useTransactions';
 import { Container, RadioBox, TransactionTypeContainer } from './styles';
 
@@ -14,15 +16,33 @@ export function EditTransactionModal({
   isOpen,
   onRequestClose,
 }: EditTransactionModalProps) {
-  const { getTransaction } = useTransactions();
-
+  const [myId, setMyId] = useState('');
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState(0);
-  const [type, setType] = useState('income');
+  const [type, setType] = useState('');
   const [category, setCategory] = useState('');
 
-  const handleInseerNewTransaction = async (event: FormEvent) => {
+  const { editTransaction } = useTransactions();
+
+  const transaction = localStorage.getItem('transactionToEdit');
+
+  useEffect(() => {
+    if (transaction) {
+      const parsedTransaction = JSON.parse(transaction);
+      setMyId(parsedTransaction.myId);
+      setTitle(parsedTransaction.title);
+      setAmount(parsedTransaction.amount);
+      setType(parsedTransaction.type);
+      setCategory(parsedTransaction.category);
+    }
+  }, [transaction]);
+
+  const handleEditTransaction = async (event: FormEvent) => {
     event.preventDefault();
+
+    await editTransaction({ myId, title, amount, type, category });
+
+    onRequestClose();
   };
 
   return (
@@ -40,7 +60,7 @@ export function EditTransactionModal({
         <CgCloseO size={20} />
       </button>
 
-      <Container onSubmit={handleInseerNewTransaction}>
+      <Container onSubmit={handleEditTransaction}>
         <h2>Cadastrar Transação</h2>
 
         <input
@@ -84,7 +104,7 @@ export function EditTransactionModal({
           onChange={(event) => setCategory(event.target.value)}
         />
 
-        <button type="submit">Cadastrar</button>
+        <button type="submit">Alterar</button>
       </Container>
     </Modal>
   );

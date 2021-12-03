@@ -15,18 +15,6 @@ export default async function handler(
   const collection = dataBase.collection('transactions');
 
   switch (method) {
-    case 'PUT':
-      const body = request.body();
-
-      const result = await collection.updateOne(
-        { myId: id },
-        { $set: { ...body } }
-      );
-
-      response.status(200).json({
-        result,
-      });
-      break;
     case 'DELETE':
       const resultDelete = await collection.deleteOne({ myId: id });
 
