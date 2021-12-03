@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
 
   table {
     width: 100%;
@@ -35,7 +37,7 @@ export const Container = styled.div`
         color: var(--red);
       }
 
-      button {
+      > button {
         background: none;
         border: 0;
         padding: 0.25rem;
@@ -52,5 +54,20 @@ export const Container = styled.div`
         }
       }
     }
+  }
+`;
+
+export const FilterSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  button {
+    margin-left: 1rem;
+    padding: 0.5rem;
+    width: 8rem;
+    border-radius: 0.25rem;
+    border: 0;
+    background: var(--light-blue);
   }
 `;

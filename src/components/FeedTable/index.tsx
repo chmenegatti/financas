@@ -1,8 +1,8 @@
 import { Transaction, useTransactions } from '../../hooks/useTransactions';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
-import { Container } from './styles';
+import { Container, FilterSection } from './styles';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { EditTransactionModal } from '../EditTransactionModel';
 
 export function FeedTable() {
@@ -11,6 +11,8 @@ export function FeedTable() {
     {} as Transaction
   );
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [filter, setFilter] = useState<Transaction[]>(transactions);
 
   const handleOpenEditModal = (transaction: Transaction) => {
     setEditTransaction(transaction);
@@ -25,8 +27,40 @@ export function FeedTable() {
     await deleteTransaction(id);
   };
 
+  useEffect(() => {
+    setFilter(transactions);
+  }, [transactions]);
+
+  const handleFilter = useCallback(
+    (type: string) => {
+      if (type === 'all') {
+        setFilter(transactions);
+        return transactions;
+      }
+      const filteredTransactions = transactions.filter(
+        (transaction) => transaction.type === type
+      );
+
+      setFilter(filteredTransactions);
+
+      return filteredTransactions;
+    },
+    [filter]
+  );
+
   return (
     <Container>
+      <FilterSection>
+        <button type="button" onClick={() => handleFilter('income')}>
+          Entradas
+        </button>
+        <button type="button" onClick={() => handleFilter('outcome')}>
+          Saídas
+        </button>
+        <button type="button" onClick={() => handleFilter('all')}>
+          Todos
+        </button>
+      </FilterSection>
       <table>
         <thead>
           <tr>
@@ -40,10 +74,9 @@ export function FeedTable() {
         </thead>
 
         <tbody>
-          {transactions.map((transaction, index) => (
+          {filter.map((transaction, index) => (
             <tr key={index}>
               <td>{Number(index) + 1}</td>
-              {console.log(transaction._id)}
               <td>{transaction.title}</td>
               <td className={transaction.type}>
                 {new Intl.NumberFormat('pt-BR', {
