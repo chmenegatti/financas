@@ -6,6 +6,8 @@ import { NewTransactionModal } from '../components/NewTransactionModal';
 import { TransactionsProvider } from '../hooks/useTransactions';
 import { GlobalStyle } from '../styles/global';
 
+Modal.setAppElement('#root');
+
 export default function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
