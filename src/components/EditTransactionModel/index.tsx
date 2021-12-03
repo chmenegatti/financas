@@ -24,7 +24,7 @@ export function EditTransactionModal({
 
   const { editTransaction } = useTransactions();
 
-  const transaction = localStorage.getItem('transactionToEdit');
+  const transaction = window.localStorage.getItem('transactionToEdit');
 
   useEffect(() => {
     if (transaction) {

@@ -11,7 +11,9 @@ export function FeedTable() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleOpenEditModal = (transaction: Transaction) => {
-    localStorage.setItem('transactionToEdit', JSON.stringify(transaction));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('transactionToEdit', JSON.stringify(transaction));
+    }
     setModalIsOpen(true);
   };
 
