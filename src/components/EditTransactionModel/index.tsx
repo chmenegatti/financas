@@ -4,17 +4,19 @@ import Modal from 'react-modal';
 
 import { CgCloseO } from 'react-icons/cg';
 import { FaArrowAltCircleDown, FaArrowAltCircleUp } from 'react-icons/fa';
-import { useTransactions } from '../../hooks/useTransactions';
+import { Transaction, useTransactions } from '../../hooks/useTransactions';
 import { Container, RadioBox, TransactionTypeContainer } from './styles';
 
 interface EditTransactionModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
+  transaction: Transaction;
 }
 
 export function EditTransactionModal({
   isOpen,
   onRequestClose,
+  transaction,
 }: EditTransactionModalProps) {
   const [myId, setMyId] = useState('');
   const [title, setTitle] = useState('');
@@ -24,17 +26,13 @@ export function EditTransactionModal({
 
   const { editTransaction } = useTransactions();
 
-  let transaction;
-
   useEffect(() => {
-    transaction = window.localStorage.getItem('transactionToEdit');
     if (transaction) {
-      const parsedTransaction = JSON.parse(transaction);
-      setMyId(parsedTransaction.myId);
-      setTitle(parsedTransaction.title);
-      setAmount(parsedTransaction.amount);
-      setType(parsedTransaction.type);
-      setCategory(parsedTransaction.category);
+      setMyId(transaction.myId);
+      setTitle(transaction.title);
+      setAmount(transaction.amount);
+      setType(transaction.type);
+      setCategory(transaction.category);
     }
   }, [transaction]);
 

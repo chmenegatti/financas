@@ -7,13 +7,13 @@ import { EditTransactionModal } from '../EditTransactionModel';
 
 export function FeedTable() {
   const { transactions, deleteTransaction } = useTransactions();
-
+  const [editTransaction, setEditTransaction] = useState<Transaction>(
+    {} as Transaction
+  );
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleOpenEditModal = (transaction: Transaction) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('transactionToEdit', JSON.stringify(transaction));
-    }
+    setEditTransaction(transaction);
     setModalIsOpen(true);
   };
 
@@ -80,6 +80,7 @@ export function FeedTable() {
       <EditTransactionModal
         isOpen={modalIsOpen}
         onRequestClose={handleCloseEditmModal}
+        transaction={editTransaction}
       />
     </Container>
   );

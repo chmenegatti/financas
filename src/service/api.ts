@@ -4,7 +4,15 @@ import axios from 'axios';
 // import Schema from 'miragejs/orm/schema';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'https://financas-nine.vercel.app/api',
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+    'Access-Control-Allow-Headers':
+      'X-Requested-With, content-type, Authorization',
+    'Access-Control-Allow-Credentials': 'true',
+  },
   // baseURL: 'https://senfinanca-server.vercel.app/api/transaction',
 });
 
