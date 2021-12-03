@@ -24,9 +24,10 @@ export function EditTransactionModal({
 
   const { editTransaction } = useTransactions();
 
-  const transaction = window.localStorage.getItem('transactionToEdit');
+  let transaction;
 
   useEffect(() => {
+    transaction = window.localStorage.getItem('transactionToEdit');
     if (transaction) {
       const parsedTransaction = JSON.parse(transaction);
       setMyId(parsedTransaction.myId);
