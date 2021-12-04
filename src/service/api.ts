@@ -4,8 +4,8 @@ import axios from 'axios';
 // import Schema from 'miragejs/orm/schema';
 
 export const api = axios.create({
-  //baseURL: 'https://financas-nine.vercel.app/api',
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'https://financas-nine.vercel.app/api',
+  //baseURL: 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
